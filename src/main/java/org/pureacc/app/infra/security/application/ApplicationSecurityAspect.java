@@ -18,11 +18,12 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Order(3)
 @Component
-class SecurityAspect {
+class ApplicationSecurityAspect {
 	private final RoleSecurityControl roleSecurityControl;
 	private final ResourceSecurityControl resourceSecurityControl;
 
-	SecurityAspect(RoleSecurityControl roleSecurityControl, ResourceSecurityControl resourceSecurityControl) {
+	ApplicationSecurityAspect(RoleSecurityControl roleSecurityControl,
+			ResourceSecurityControl resourceSecurityControl) {
 		this.roleSecurityControl = roleSecurityControl;
 		this.resourceSecurityControl = resourceSecurityControl;
 	}

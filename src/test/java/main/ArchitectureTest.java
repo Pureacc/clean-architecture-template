@@ -2,6 +2,9 @@ package main;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,6 +22,7 @@ public class ArchitectureTest {
 	private static final String APPLICATION_COMMAND = "org.pureacc.app.application.command..";
 	private static final String APPLICATION_QUERY = "org.pureacc.app.application.query..";
 
+	private static final String INFRA = "org.pureacc.app.infra..";
 	private static final String INFRA_REST = "org.pureacc.app.infra.rest..";
 	private static final String INFRA_JPA = "org.pureacc.app.infra.jpa..";
 	private static final String INFRA_TIME = "org.pureacc.app.infra.time..";
@@ -27,7 +31,7 @@ public class ArchitectureTest {
 	private static final String INFRA_EXCEPTION_HANDLING = "org.pureacc.app.infra.exceptionhandling..";
 	private static final String INFRA_VALIDATION = "org.pureacc.app.infra.validation..";
 	private static final String INFRA_AUDIT = "org.pureacc.app.infra.audit..";
-	private static final String[] CALLING_INFRA = new String[] { INFRA_REST };
+	private static final String[] CALLING_INFRA = new String[] { INFRA_REST, INFRA_EVENTS };
 	private static final String[] IMPLEMENTING_INFRA = new String[] { INFRA_JPA,
 																	  INFRA_EVENTS,
 																	  INFRA_TIME,
@@ -49,11 +53,8 @@ public class ArchitectureTest {
 	@Test
 	public void properPackageStructure() {
 		classes().should()
-				.resideInAnyPackage(MAIN, VOCABULARY, DOMAIN, APPLICATION_API, APPLICATION_COMMAND, APPLICATION_QUERY)
-				.orShould()
-				.resideInAnyPackage(CALLING_INFRA)
-				.orShould()
-				.resideInAnyPackage(IMPLEMENTING_INFRA)
+				.resideInAnyPackage(MAIN, VOCABULARY, DOMAIN, APPLICATION_API, APPLICATION_COMMAND, APPLICATION_QUERY,
+						INFRA)
 				.check(classes);
 	}
 
@@ -109,21 +110,37 @@ public class ArchitectureTest {
 
 	@Test
 	public void callingInfra() {
-		classes().that()
-				.resideInAnyPackage(CALLING_INFRA)
-				.should()
-				.onlyAccessClassesThat()
-				.resideOutsideOfPackages(APPLICATION_QUERY, APPLICATION_COMMAND, DOMAIN)
-				.check(classes);
+		for (String infra : CALLING_INFRA) {
+			classes().that()
+					.resideInAnyPackage(infra)
+					.should()
+					.onlyAccessClassesThat()
+					.resideOutsideOfPackages(APPLICATION_QUERY, APPLICATION_COMMAND, DOMAIN)
+					.andShould()
+					.onlyAccessClassesThat()
+					.resideOutsideOfPackages(allInfraExcept(infra))
+					.check(classes);
+		}
 	}
 
 	@Test
 	public void implementingInfra() {
-		classes().that()
-				.resideInAnyPackage(IMPLEMENTING_INFRA)
-				.should()
-				.onlyAccessClassesThat()
-				.resideOutsideOfPackages(APPLICATION_QUERY, APPLICATION_COMMAND)
-				.check(classes);
+		for (String infra : IMPLEMENTING_INFRA) {
+			classes().that()
+					.resideInAPackage(infra)
+					.should()
+					.onlyAccessClassesThat()
+					.resideOutsideOfPackages(APPLICATION_QUERY, APPLICATION_COMMAND)
+					.andShould()
+					.onlyAccessClassesThat()
+					.resideOutsideOfPackages(allInfraExcept(infra))
+					.check(classes);
+		}
+	}
+
+	private String[] allInfraExcept(String infra) {
+		return Stream.concat(Arrays.stream(CALLING_INFRA), Arrays.stream(IMPLEMENTING_INFRA))
+				.filter(s -> !s.equals(infra))
+				.toArray(String[]::new);
 	}
 }

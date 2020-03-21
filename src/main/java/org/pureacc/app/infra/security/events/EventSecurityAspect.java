@@ -1,4 +1,4 @@
-package org.pureacc.app.infra.events.controller;
+package org.pureacc.app.infra.security.events;
 
 import static java.util.Collections.singletonList;
 import static org.pureacc.app.infra.security.web.AuthenticationService.Authority.SYSTEM;

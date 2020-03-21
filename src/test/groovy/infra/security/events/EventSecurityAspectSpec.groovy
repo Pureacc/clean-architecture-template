@@ -1,9 +1,9 @@
-package infra.events.controller
+package infra.security.events
 
-
+import infra.events.controller.TestEventController
 import org.pureacc.app.domain.service.EventPublisher
 import org.pureacc.app.infra.events.SpringEventPublisher
-import org.pureacc.app.infra.events.controller.EventSecurityAspect
+import org.pureacc.app.infra.security.events.EventSecurityAspect
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.EnableAspectJAutoProxy
 import org.springframework.security.core.context.SecurityContextHolder
