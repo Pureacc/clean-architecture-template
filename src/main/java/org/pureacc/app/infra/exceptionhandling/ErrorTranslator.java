@@ -2,7 +2,7 @@ package org.pureacc.app.infra.exceptionhandling;
 
 import java.util.Locale;
 
-import org.pureacc.app.domain.DomainException;
+import org.pureacc.app.vocabulary.exception.DomainException;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.ResourceBundleMessageSource;
 

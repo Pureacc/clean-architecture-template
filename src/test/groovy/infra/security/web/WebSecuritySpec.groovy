@@ -111,8 +111,8 @@ class WebSecuritySpec extends application.AbstractApplicationSpec {
         HttpEntity<String> entity = new HttpEntity<String>(testutil.ResourceReader.asString(userRegisterRequest), headers)
         ResponseEntity response = restTemplate.exchange("http://localhost:${port}/api/user/register", HttpMethod.POST, entity, String.class)
 
-        then: "I receive a 200 Ok"
-        response.statusCode == HttpStatus.OK
+        then: "I receive a successful response"
+        response.statusCode == HttpStatus.CREATED
     }
 
     private ResponseEntity login(String username, String password) {

@@ -37,8 +37,8 @@ class UserControllerSpec extends AbstractControllerSpec {
             it.username == Username.of(username)
             it.password == Password.of(password)
         }) >> CreateUser.Response.newBuilder().withUserId(UserId.of(userId)).build()
-        and: "HTTP status is 200"
-        result.andExpect(status().isOk())
+        and: "HTTP status is 201"
+        result.andExpect(status().isCreated())
         and: "I receive the user id"
         result.andExpect(jsonPath('$.userId').value(userId))
 

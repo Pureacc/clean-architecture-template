@@ -1,7 +1,7 @@
 package infra.exceptionhandling;
 
-import org.pureacc.app.domain.DomainException;
 import org.pureacc.app.vocabulary.annotation.Command;
+import org.pureacc.app.vocabulary.exception.DomainException;
 import org.pureacc.app.vocabulary.exception.SystemException;
 
 @Command

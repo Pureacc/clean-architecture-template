@@ -10,7 +10,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.pureacc.app.domain.DomainException;
+import org.pureacc.app.vocabulary.exception.DomainException;
 import org.pureacc.app.vocabulary.exception.SystemException;
 import org.pureacc.app.vocabulary.exception.UserException;
 import org.slf4j.Logger;

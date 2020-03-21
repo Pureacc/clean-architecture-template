@@ -1,4 +1,4 @@
-package org.pureacc.app.domain;
+package org.pureacc.app.vocabulary.exception;
 
 public class DomainException extends RuntimeException {
 	private final String key;

@@ -41,8 +41,4 @@ public class User {
 	public Password getPassword() {
 		return password;
 	}
-
-	boolean hasId(UserId userId) {
-		return this.userId.equals(userId);
-	}
 }

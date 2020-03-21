@@ -1,5 +1,7 @@
 package org.pureacc.app.infra.rest;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 import org.pureacc.app.application.api.CreateUser;
 import org.pureacc.app.application.api.GetUser;
 import org.pureacc.app.vocabulary.Password;
@@ -20,19 +22,19 @@ class UserController {
 		this.getUser = getUser;
 	}
 
+	@ResponseStatus(CREATED)
 	@PostMapping("/api/user/register")
-	public RegisterWebResponse register(@RequestBody RegisterWebRequest webRequest) {
+	RegisterWebResponse register(@RequestBody RegisterWebRequest webRequest) {
 		CreateUser.Request request = CreateUser.Request.newBuilder()
 				.withUsername(webRequest.getUsername())
 				.withPassword(webRequest.getPassword())
 				.build();
 		CreateUser.Response response = createUser.execute(request);
-		return new RegisterWebResponse(response.getUserId()
-				.getValue());
+		return new RegisterWebResponse(response.getUserId());
 	}
 
 	@GetMapping("/api/user")
-	public GetUserWebResponse get(@RequestParam("userId") long userId) {
+	GetUserWebResponse get(@RequestParam("userId") long userId) {
 		GetUser.Request request = GetUser.Request.newBuilder()
 				.withUserId(UserId.of(userId))
 				.build();
@@ -62,8 +64,8 @@ class UserController {
 	static final class RegisterWebResponse {
 		private final long userId;
 
-		RegisterWebResponse(long userId) {
-			this.userId = userId;
+		RegisterWebResponse(UserId userId) {
+			this.userId = userId.getValue();
 		}
 
 		public long getUserId() {
